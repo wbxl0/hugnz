@@ -4,15 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       image_name:
-        description: '镜像名称'
+        description: 'hugnz'
         required: true
-        default: '请输入自己的镜像名称'
-        type: string
+        default: 'hugnz'
+        输入: string
       image_tag:
-        description: '镜像标签'
+        description: 'nz'
         required: true
         default: 'latest'
-        type: string
+        输入: string
 
 jobs:
   # 构建并推送镜像
