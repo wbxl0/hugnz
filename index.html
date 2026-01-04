@@ -3,298 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API 服务 - 数据处理平台</title>
+    <title>共建绿色家园 - 保护环境</title>
     <style>
+        /* --- 全局样式 --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            width: 100%;
-            padding: 60px 40px;
-            text-align: center;
-        }
-        
-        .logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-        }
-        
-        h1 {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        
-        .subtitle {
-            color: #666;
-            font-size: 16px;
-            margin-bottom: 40px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             line-height: 1.6;
+            color: #333;
+            background-color: #f9fff9;
         }
-        
-        .status-box {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 6px;
-            text-align: left;
+
+        a {
+            text-decoration: none;
+            color: inherit;
         }
-        
-        .status-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-            font-size: 14px;
-            color: #555;
+
+        ul {
+            list-style: none;
         }
-        
-        .status-item:last-child {
-            margin-bottom: 0;
-        }
-        
-        .status-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #10b981;
-            margin-right: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
+        /* --- 导航栏 --- */
+        header {
+            background-color: #2e7d32;
             color: white;
-            font-size: 12px;
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
             font-weight: bold;
         }
-        
-        .features {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 40px;
-            text-align: left;
-        }
-        
-        .feature-item {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
-        }
-        
-        .feature-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-        
-        .feature-title {
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-        
-        .feature-desc {
-            color: #666;
-            font-size: 12px;
-        }
-        
-        .info-box {
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 30px;
-            color: #1e40af;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-        
-        .info-box strong {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        
-        .button-group {
+
+        nav ul {
             display: flex;
-            gap: 12px;
+            gap: 20px;
+        }
+
+        nav a:hover {
+            color: #a5d6a7;
+        }
+
+        /* --- 头部大图 (Hero Section) --- */
+        .hero {
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border-radius: 6px;
-            border: none;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            align-items: center;
+            text-align: center;
             color: white;
+            padding: 0 20px;
         }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
-        
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-            border: 1px solid #ddd;
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
         }
-        
-        .btn-secondary:hover {
-            background: #e8e8e8;
+
+        .btn {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: background 0.3s;
+            cursor: pointer;
+            border: none;
         }
-        
-        .footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            color: #999;
-            font-size: 12px;
+
+        .btn:hover {
+            background-color: #388e3c;
         }
-        
-        .footer a {
-            color: #667eea;
-            text-decoration: none;
+
+        /* --- 通用区块样式 --- */
+        section {
+            padding: 4rem 5%;
         }
-        
-        .footer a:hover {
-            text-decoration: underline;
+
+        h2.section-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #2e7d32;
+            margin-bottom: 3rem;
+            position: relative;
         }
-        
-        @media (max-width: 600px) {
-            .container {
-                padding: 40px 20px;
+
+        h2.section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: #4caf50;
+            margin: 10px auto 0;
+        }
+
+        /* --- 为什么要保护环境 --- */
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about-image {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* --- 我们可以做什么 (卡片布局) --- */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .card h3 {
+            margin-bottom: 1rem;
+            color: #388e3c;
+        }
+
+        /* --- 页脚 --- */
+        footer {
+            background-color: #1b5e20;
+            color: #e8f5e9;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* --- 响应式调整 --- */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
             }
             
-            h1 {
-                font-size: 24px;
-            }
-            
-            .features {
-                grid-template-columns: 1fr;
+            nav {
+                display: none; /* 移动端简单隐藏菜单，实际项目中可做汉堡菜单 */
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">🚀</div>
-        
-        <h1>API 服务平台</h1>
-        <p class="subtitle">高性能数据处理与监控服务</p>
-        
-        <div class="status-box">
-            <div class="status-item">
-                <div class="status-icon">✓</div>
-                <span><strong>服务状态：</strong>正常运行</span>
+
+    <!-- 导航栏 -->
+    <header>
+        <div class="logo">🌿 绿色地球</div>
+        <nav>
+            <ul>
+                <li><a href="#home">首页</a></li>
+                <li><a href="#about">现状</a></li>
+                <li><a href="#action">行动</a></li>
+                <li><a href="#contact">加入我们</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 主视觉区域 -->
+    <section id="home" class="hero">
+        <h1>善待地球，就是善待自己</h1>
+        <p>环境保护不是一句口号，而是我们每个人的生活方式。让我们携手共创一个天蓝、地绿、水清的美好家园。</p>
+        <a href="#action"><button class="btn">立即行动</button></a>
+    </section>
+
+    <!-- 关于环境现状 -->
+    <section id="about">
+        <h2 class="section-title">我们面临的挑战</h2>
+        <div class="about-content">
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="自然风景">
             </div>
-            <div class="status-item">
-                <div class="status-icon">✓</div>
-                <span><strong>API 版本：</strong>v1.0</span>
-            </div>
-            <div class="status-item">
-                <div class="status-icon">✓</div>
-                <span><strong>响应时间：</strong>&lt; 100ms</span>
-            </div>
-        </div>
-        
-        <div class="features">
-            <div class="feature-item">
-                <div class="feature-icon">📊</div>
-                <div class="feature-title">实时监控</div>
-                <div class="feature-desc">全天候系统监控</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">🔒</div>
-                <div class="feature-title">安全加密</div>
-                <div class="feature-desc">企业级数据保护</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">⚡</div>
-                <div class="feature-title">高性能</div>
-                <div class="feature-desc">毫秒级响应</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">🌐</div>
-                <div class="feature-title">全球部署</div>
-                <div class="feature-desc">多地域支持</div>
+            <div class="about-text">
+                <p>随着工业化的进程，我们的地球正面临前所未有的压力。全球变暖、冰川融化、森林锐减以及塑料污染正在威胁着地球上所有生物的生存。</p>
+                <br>
+                <p><strong>你知道吗？</strong> 每年有数百万吨的塑料垃圾流入海洋。如果我们不立即采取行动，未来的几代人将失去绿色的森林和清澈的河流。</p>
             </div>
         </div>
-        
-        <div class="info-box">
-            <strong>📌 重要提示</strong>
-            这是一个 API 服务端点。如需访问管理面板，请使用授权的域名进行访问。所有请求需要有效的 API 密钥。
+    </section>
+
+    <!-- 行动指南 -->
+    <section id="action" style="background-color: #e8f5e9;">
+        <h2 class="section-title">我们可以做什么？</h2>
+        <div class="actions-grid">
+            <!-- 卡片 1 -->
+            <div class="card">
+                <span class="card-icon">♻️</span>
+                <h3>垃圾分类</h3>
+                <p>认真做好垃圾分类，促进资源回收利用，减少填埋和焚烧带来的污染。</p>
+            </div>
+            <!-- 卡片 2 -->
+            <div class="card">
+                <span class="card-icon">🚲</span>
+                <h3>低碳出行</h3>
+                <p>多乘坐公共交通工具，骑自行车或步行，减少私家车使用，降低碳排放。</p>
+            </div>
+            <!-- 卡片 3 -->
+            <div class="card">
+                <span class="card-icon">💧</span>
+                <h3>节约资源</h3>
+                <p>随手关灯，节约用水，减少使用一次性塑料制品，拒绝浪费食物。</p>
+            </div>
+            <!-- 卡片 4 -->
+            <div class="card">
+                <span class="card-icon">🌳</span>
+                <h3>植树护绿</h3>
+                <p>积极参与植树造林活动，保护野生动物，不破坏自然生态平衡。</p>
+            </div>
         </div>
-        
-        <div class="button-group">
-            <button class="btn btn-primary" onclick="showAlert()">查看文档</button>
-            <button class="btn btn-secondary" onclick="checkStatus()">检查状态</button>
-        </div>
-        
-        <div class="footer">
-            <p>© 2024 API 服务平台 | <a href="#">隐私政策</a> | <a href="#">服务条款</a></p>
-            <p style="margin-top: 8px;">Powered by Hugging Face</p>
-        </div>
-    </div>
-    
+    </section>
+
+    <!-- 页脚 -->
+    <footer id="contact">
+        <p>&copy; 2023 绿色地球公益组织. All Rights Reserved.</p>
+        <p>保护环境，从我做起。</p>
+    </footer>
+
+    <!-- 平滑滚动脚本 -->
     <script>
-        function showAlert() {
-            alert('API 文档已发送至您的邮箱。\n\n如需获取完整文档，请联系技术支持。');
-        }
-        
-        function checkStatus() {
-            const status = {
-                'API 服务': '✓ 正常',
-                '数据库': '✓ 正常',
-                '缓存服务': '✓ 正常',
-                '消息队列': '✓ 正常'
-            };
-            
-            let message = '系统状态检查结果：\n\n';
-            for (let key in status) {
-                message += key + ': ' + status[key] + '\n';
-            }
-            alert(message);
-        }
-        
-        // 防止直接访问敏感路径
-        console.log('API Service Platform v1.0');
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
 </body>
 </html>
