@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       image_name:
-        description: 'asjkhj'
+        description: 'bsajshj'
         required: true
-        default: 'slaklsak'
+        default: 'bsajshj'
         输入: string
       image_tag:
         description: 'nz'
