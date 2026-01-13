@@ -1,285 +1,438 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>共建绿色家园 - 保护环境</title>
-    <style>
-        /* --- 全局样式 --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Protect Black Rights | Stand Against Racism</title>
+  <meta name="description" content="Promoting equality, dignity, and safety. Support Black rights and stand against racism in all forms." />
 
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f9fff9;
-        }
+  <style>
+    :root{
+      --bg:#0b0f19;
+      --card:#121a2a;
+      --text:#e8eefc;
+      --muted:#a9b6d6;
+      --accent:#ffd166;
+      --accent2:#06d6a0;
+      --danger:#ef476f;
+      --border: rgba(255,255,255,.12);
+      --shadow: 0 12px 35px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+    *{ box-sizing: border-box; }
 
-        ul {
-            list-style: none;
-        }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", sans-serif;
+      background:
+        radial-gradient(1100px 700px at 15% 10%, rgba(255,209,102,.14), transparent 55%),
+        radial-gradient(900px 600px at 85% 20%, rgba(6,214,160,.12), transparent 55%),
+        radial-gradient(900px 600px at 40% 95%, rgba(239,71,111,.10), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
 
-        /* --- 导航栏 --- */
-        header {
-            background-color: #2e7d32;
-            color: white;
-            padding: 1rem 5%;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
+    .container{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
 
-        nav ul {
-            display: flex;
-            gap: 20px;
-        }
+    /* Top bar */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(18, 26, 42, .62);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 16px;
+      z-index: 10;
+    }
 
-        nav a:hover {
-            color: #a5d6a7;
-        }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
 
-        /* --- 头部大图 (Hero Section) --- */
-        .hero {
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            height: 90vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            padding: 0 20px;
-        }
+    .badge{
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+    }
 
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
+    .nav{
+      display:flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+      font-size: 14px;
+      color: var(--muted);
+    }
 
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin-bottom: 2rem;
-        }
+    /* Hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
 
-        .btn {
-            background-color: #4caf50;
-            color: white;
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-size: 1rem;
-            transition: background 0.3s;
-            cursor: pointer;
-            border: none;
-        }
+    .card{
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(18, 26, 42, .70);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: 22px;
+    }
 
-        .btn:hover {
-            background-color: #388e3c;
-        }
+    .hero h1{
+      margin: 0 0 10px;
+      font-size: clamp(28px, 3.2vw, 46px);
+      line-height: 1.15;
+    }
 
-        /* --- 通用区块样式 --- */
-        section {
-            padding: 4rem 5%;
-        }
+    .hero p{
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 16px;
+    }
 
-        h2.section-title {
-            text-align: center;
-            font-size: 2rem;
-            color: #2e7d32;
-            margin-bottom: 3rem;
-            position: relative;
-        }
+    .highlights{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 16px 0 0;
+    }
 
-        h2.section-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background-color: #4caf50;
-            margin: 10px auto 0;
-        }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-size: 14px;
+    }
 
-        /* --- 为什么要保护环境 --- */
-        .about-content {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 2rem;
-        }
+    .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(255,209,102,.14);
+    }
+    .dot.green{ background: var(--accent2); box-shadow: 0 0 0 4px rgba(6,214,160,.14); }
+    .dot.pink{ background: var(--danger); box-shadow: 0 0 0 4px rgba(239,71,111,.14); }
 
-        .about-text {
-            flex: 1;
-            min-width: 300px;
-        }
+    .ctaRow{
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
 
-        .about-image {
-            flex: 1;
-            min-width: 300px;
-        }
+    button, .btn{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform .15s ease, background .15s ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      user-select: none;
+    }
 
-        .about-image img {
-            width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+    button:hover, .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.07);
+    }
 
-        /* --- 我们可以做什么 (卡片布局) --- */
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(255,209,102,.22), rgba(6,214,160,.18));
+      border-color: rgba(255,209,102,.35);
+    }
 
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
+    .btn.primary:hover{
+      background: linear-gradient(135deg, rgba(255,209,102,.28), rgba(6,214,160,.22));
+    }
 
-        .card:hover {
-            transform: translateY(-10px);
-        }
+    /* Sections */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
 
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
+    .span-6{ grid-column: span 6; }
+    .span-4{ grid-column: span 4; }
+    .span-8{ grid-column: span 8; }
+    .span-12{ grid-column: span 12; }
 
-        .card h3 {
-            margin-bottom: 1rem;
-            color: #388e3c;
-        }
+    h2{
+      margin: 0 0 10px;
+      font-size: 20px;
+      letter-spacing: .2px;
+    }
 
-        /* --- 页脚 --- */
-        footer {
-            background-color: #1b5e20;
-            color: #e8f5e9;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 2rem;
-        }
+    .muted{ color: var(--muted); }
 
-        /* --- 响应式调整 --- */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            nav {
-                display: none; /* 移动端简单隐藏菜单，实际项目中可做汉堡菜单 */
-            }
-        }
-    </style>
+    ul{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    li{ margin: 8px 0; }
+
+    .quote{
+      border-left: 3px solid rgba(255,209,102,.8);
+      padding-left: 14px;
+      color: var(--text);
+      font-style: italic;
+    }
+
+    .mini{
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .footer{
+      margin: 22px 0 40px;
+      text-align:center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .hero{
+        grid-template-columns: 1fr;
+      }
+      .span-6, .span-4, .span-8{
+        grid-column: span 12;
+      }
+      .nav{
+        display:none;
+      }
+    }
+  </style>
 </head>
-<body>
 
-    <!-- 导航栏 -->
-    <header>
-        <div class="logo">🌿 绿色地球</div>
-        <nav>
-            <ul>
-                <li><a href="#home">首页</a></li>
-                <li><a href="#about">现状</a></li>
-                <li><a href="#action">行动</a></li>
-                <li><a href="#contact">加入我们</a></li>
-            </ul>
-        </nav>
+<body>
+  <div class="container">
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <span aria-hidden="true">✊🏿</span>
+        <span>Stand for Equality</span>
+        <span class="badge">Anti-Racism</span>
+      </div>
+
+      <nav class="nav" aria-label="Site navigation">
+        <a href="#why">Why it matters</a>
+        <a href="#actions">How to help</a>
+        <a href="#learn">Learn more</a>
+        <a href="#pledge">Pledge</a>
+      </nav>
     </header>
 
-    <!-- 主视觉区域 -->
-    <section id="home" class="hero">
-        <h1>善待地球，就是善待自己</h1>
-        <p>环境保护不是一句口号，而是我们每个人的生活方式。让我们携手共创一个天蓝、地绿、水清的美好家园。</p>
-        <a href="#action"><button class="btn">立即行动</button></a>
-    </section>
+    <!-- Hero -->
+    <section class="hero" id="top">
+      <div class="card">
+        <h1>Protect Black Rights.<br/>Reject Racism. Build a safer world.</h1>
+        <p>
+          Black lives deserve <strong>dignity</strong>, <strong>fairness</strong>, and <strong>equal protection</strong>.
+          This page is a simple reminder: racism is not “normal”, and silence is never neutral.
+        </p>
 
-    <!-- 关于环境现状 -->
-    <section id="about">
-        <h2 class="section-title">我们面临的挑战</h2>
-        <div class="about-content">
-            <div class="about-image">
-                <img src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="自然风景">
-            </div>
-            <div class="about-text">
-                <p>随着工业化的进程，我们的地球正面临前所未有的压力。全球变暖、冰川融化、森林锐减以及塑料污染正在威胁着地球上所有生物的生存。</p>
-                <br>
-                <p><strong>你知道吗？</strong> 每年有数百万吨的塑料垃圾流入海洋。如果我们不立即采取行动，未来的几代人将失去绿色的森林和清澈的河流。</p>
-            </div>
+        <div class="quote">
+          “Justice is what love looks like in public.”
         </div>
-    </section>
 
-    <!-- 行动指南 -->
-    <section id="action" style="background-color: #e8f5e9;">
-        <h2 class="section-title">我们可以做什么？</h2>
-        <div class="actions-grid">
-            <!-- 卡片 1 -->
-            <div class="card">
-                <span class="card-icon">♻️</span>
-                <h3>垃圾分类</h3>
-                <p>认真做好垃圾分类，促进资源回收利用，减少填埋和焚烧带来的污染。</p>
-            </div>
-            <!-- 卡片 2 -->
-            <div class="card">
-                <span class="card-icon">🚲</span>
-                <h3>低碳出行</h3>
-                <p>多乘坐公共交通工具，骑自行车或步行，减少私家车使用，降低碳排放。</p>
-            </div>
-            <!-- 卡片 3 -->
-            <div class="card">
-                <span class="card-icon">💧</span>
-                <h3>节约资源</h3>
-                <p>随手关灯，节约用水，减少使用一次性塑料制品，拒绝浪费食物。</p>
-            </div>
-            <!-- 卡片 4 -->
-            <div class="card">
-                <span class="card-icon">🌳</span>
-                <h3>植树护绿</h3>
-                <p>积极参与植树造林活动，保护野生动物，不破坏自然生态平衡。</p>
-            </div>
+        <div class="highlights" aria-label="Key values">
+          <span class="pill"><span class="dot"></span> Equality</span>
+          <span class="pill"><span class="dot green"></span> Safety</span>
+          <span class="pill"><span class="dot pink"></span> Accountability</span>
         </div>
+
+        <div class="ctaRow">
+          <a class="btn primary" href="#actions">✅ Take Action</a>
+          <button class="btn" id="copyBtn">📌 Copy a Support Message</button>
+        </div>
+
+        <p class="mini" style="margin-top:12px;">
+          Tip: You can edit this page and add local community resources, hotline info, or organization links.
+        </p>
+      </div>
+
+      <aside class="card">
+        <h2>Quick Support Message</h2>
+        <p class="muted">
+          Use this message to show support online, in a group chat, or in your community.
+        </p>
+
+        <div class="card" style="padding:14px; background: rgba(255,255,255,.03);">
+          <div id="supportText" style="white-space: pre-wrap; color: var(--text);">
+I stand with Black communities.
+I believe in equal rights, equal protection, and equal opportunity.
+Racism has no place in our society.
+          </div>
+        </div>
+
+        <p class="mini">
+          Keep it respectful, truthful, and focused on solidarity.
+        </p>
+      </aside>
     </section>
 
-    <!-- 页脚 -->
-    <footer id="contact">
-        <p>&copy; 2023 绿色地球公益组织. All Rights Reserved.</p>
-        <p>保护环境，从我做起。</p>
+    <!-- Content grid -->
+    <section class="grid">
+      <div class="card span-6" id="why">
+        <h2>Why it matters</h2>
+        <p class="muted">
+          Protecting Black rights means protecting basic human rights: the right to live safely, be treated fairly,
+          and have equal access to education, healthcare, housing, and justice.
+        </p>
+        <ul>
+          <li><strong>Racism harms individuals</strong> through discrimination, violence, and exclusion.</li>
+          <li><strong>Racism harms society</strong> by weakening trust, fairness, and opportunity.</li>
+          <li><strong>Equality benefits everyone</strong> because justice is not a “limited resource”.</li>
+        </ul>
+      </div>
+
+      <div class="card span-6" id="actions">
+        <h2>How to help (realistic actions)</h2>
+        <p class="muted">You don’t need to be perfect to be helpful. Start where you are.</p>
+        <ul>
+          <li><strong>Speak up</strong> when you hear racist jokes, stereotypes, or slurs.</li>
+          <li><strong>Support Black voices</strong> by listening and sharing credible resources.</li>
+          <li><strong>Vote & participate</strong> in policies that protect civil rights.</li>
+          <li><strong>Donate or volunteer</strong> with organizations improving equality and safety.</li>
+          <li><strong>Learn continuously</strong> and correct misinformation with empathy + facts.</li>
+        </ul>
+      </div>
+
+      <div class="card span-4" id="learn">
+        <h2>Learn more</h2>
+        <p class="muted">
+          Education is a long-term action. Explore history, law, and lived experiences.
+        </p>
+        <ul>
+          <li>Read about civil rights movements</li>
+          <li>Understand systemic discrimination</li>
+          <li>Learn how to be an ally</li>
+        </ul>
+        <p class="mini">
+          (You can add links here to books, documentaries, or local organizations.)
+        </p>
+      </div>
+
+      <div class="card span-8">
+        <h2>What allyship looks like</h2>
+        <p class="muted">
+          Allyship is not a label — it’s consistent behavior. It includes respectful listening,
+          supporting accountability, and taking action when it matters.
+        </p>
+
+        <div class="grid" style="margin-top:12px; gap:12px;">
+          <div class="card span-4" style="padding:14px; background: rgba(255,255,255,.03);">
+            <strong>Listen</strong>
+            <div class="mini">Believe people’s experiences and avoid dismissing harm.</div>
+          </div>
+          <div class="card span-4" style="padding:14px; background: rgba(255,255,255,.03);">
+            <strong>Learn</strong>
+            <div class="mini">Recognize bias, history, and structural barriers.</div>
+          </div>
+          <div class="card span-4" style="padding:14px; background: rgba(255,255,255,.03);">
+            <strong>Act</strong>
+            <div class="mini">Support equal opportunities and fair treatment in daily life.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card span-12" id="pledge">
+        <h2>A simple pledge</h2>
+        <p class="muted">
+          If you want, copy this pledge and share it. Small acts of solidarity add up.
+        </p>
+        <div class="card" style="padding:16px; background: rgba(255,255,255,.03);">
+          <div style="white-space: pre-wrap;">
+I will treat Black people with respect and fairness.
+I will challenge racism when I see it.
+I will keep learning and supporting equal rights for all.
+          </div>
+        </div>
+
+        <div class="ctaRow" style="margin-top:14px;">
+          <button class="btn primary" id="pledgeBtn">🖊️ I Agree</button>
+          <button class="btn" id="scrollTopBtn">⬆️ Back to Top</button>
+        </div>
+
+        <p class="mini" id="pledgeStatus" style="margin-top:10px;"></p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Built as a static page for awareness and education. ✊🏿
+      <br />
+      You can freely customize the text for your community, school, or organization.
     </footer>
+  </div>
 
-    <!-- 平滑滚动脚本 -->
-    <script>
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-    </script>
+  <script>
+    const copyBtn = document.getElementById("copyBtn");
+    const supportText = document.getElementById("supportText").innerText;
+
+    copyBtn.addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText(supportText.trim());
+        copyBtn.textContent = "✅ Copied!";
+        setTimeout(() => copyBtn.textContent = "📌 Copy a Support Message", 1200);
+      }catch(e){
+        alert("Copy failed. Please copy manually.");
+      }
+    });
+
+    document.getElementById("scrollTopBtn").addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    const pledgeBtn = document.getElementById("pledgeBtn");
+    const pledgeStatus = document.getElementById("pledgeStatus");
+
+    pledgeBtn.addEventListener("click", () => {
+      pledgeStatus.textContent = "✅ Thank you for standing for equality. Keep showing up, learning, and taking action.";
+      pledgeBtn.textContent = "✅ Pledged";
+      pledgeBtn.disabled = true;
+      pledgeBtn.style.opacity = "0.7";
+      pledgeBtn.style.cursor = "not-allowed";
+    });
+  </script>
 </body>
 </html>
