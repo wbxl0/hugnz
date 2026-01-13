@@ -16,6 +16,8 @@ GITHUB_TOKEN=${GITHUB_TOKEN:-""}
 GITHUB_BRANCH=${GITHUB_BRANCH:-main}
 ZIP_PASSWORD=${ZIP_PASSWORD:-""}
 
+PROJECT_URL=${PROJECT_URL:-""}
+
 # =========================
 # 日志函数
 # =========================
@@ -33,6 +35,24 @@ log_warn() {
 
 log_error() {
     echo "[ERROR] $(date '+%Y-%m-%d %H:%M:%S') $1"
+}
+
+# =========================
+# 保活函数
+# =========================
+add_visit_task() {
+    if [ -z "$PROJECT_URL" ]; then
+        log_info "跳过自动保活任务"
+        return 0
+    fi
+    
+    if curl -s -X POST "https://trans.ct8.pl/add-url" \
+        -H "Content-Type: application/json" \
+        -d "{\"url\":\"$PROJECT_URL\"}" >/dev/null; then
+        log_ok "自动保活任务添加成功"
+    else
+        log_error "添加自动保活任务失败"
+    fi
 }
 
 # =========================
@@ -80,8 +100,10 @@ echo "=========================================="
 echo " 步骤 2: 恢复备份"
 echo "=========================================="
 
+RESTORE_SUCCESS=false
 if /restore.sh; then
     log_ok "备份恢复成功"
+    RESTORE_SUCCESS=true
 else
     log_warn "无可用备份，继续启动"
 fi
@@ -93,7 +115,41 @@ log_info "启动 crond"
 crond
 
 # =========================
-# 步骤 4: 启动面板 (关键：必须在探针之前启动)
+# 步骤 3.5: 生成面板配置（首次部署）
+# =========================
+if [ "$RESTORE_SUCCESS" = "false" ]; then
+    echo "=========================================="
+    echo " 步骤 3.5: 生成面板配置（首次部署）"
+    echo "=========================================="
+    
+    mkdir -p /dashboard/data
+    JWT_SECRET=$(head -c 512 /dev/urandom | base64 | tr -dc 'a-zA-Z0-9' | head -c 512)
+    NZ_CLIENT_SECRET=${NZ_CLIENT_SECRET:-$(head -c 32 /dev/urandom | base64 | tr -dc 'a-zA-Z0-9' | head -c 32)}
+    NZ_UUID=${NZ_UUID:-$(cat /proc/sys/kernel/random/uuid)}
+    
+    cat > /dashboard/data/config.yaml <<EOF
+admin_template: admin-dist
+agent_secret_key: $NZ_CLIENT_SECRET
+avg_ping_count: 2
+cover: 1
+https: {}
+ip_change_notification_group_id: 0
+jwt_secret_key: $JWT_SECRET
+jwt_timeout: 1
+language: zh_CN
+listen_port: 8008
+location: Asia/Shanghai
+site_name: 哪吒监控
+tls: ${NZ_TLS:-true}
+user_template: user-dist
+EOF
+    log_ok "面板配置已生成"
+    log_info "NZ_UUID=$NZ_UUID"
+    log_info "NZ_CLIENT_SECRET=$NZ_CLIENT_SECRET"
+fi
+
+# =========================
+# 步骤 4: 启动面板
 # =========================
 echo "=========================================="
 echo " 步骤 4: 启动面板"
@@ -103,13 +159,11 @@ echo "=========================================="
 APP_PID=$!
 log_info "面板已启动 (PID: $APP_PID)"
 
-# 等待面板端口就绪
 if ! wait_for_port 8008 60; then
     log_error "面板启动失败"
     exit 1
 fi
 
-# 额外等待确保完全初始化
 sleep 3
 log_ok "面板已完全就绪"
 
@@ -126,7 +180,6 @@ if [ -n "$ARGO_DOMAIN" ]; then
     openssl req -new -subj "/CN=$ARGO_DOMAIN" -key /dashboard/nezha.key -out /dashboard/nezha.csr 2>/dev/null
     openssl x509 -req -days 36500 -in /dashboard/nezha.csr -signkey /dashboard/nezha.key -out /dashboard/nezha.pem 2>/dev/null
     
-    # 替换域名占位符
     sed "s/ARGO_DOMAIN_PLACEHOLDER/$ARGO_DOMAIN/g" /etc/nginx/ssl.conf.template > /etc/nginx/conf.d/ssl.conf
     
     nginx -s reload
@@ -174,7 +227,6 @@ case $arch in
         ;;
 esac
 
-# 获取版本号
 if [ -z "$DASHBOARD_VERSION" ] || [ "$DASHBOARD_VERSION" = "latest" ]; then
     DASHBOARD_VERSION=$(curl -s https://api.github.com/repos/nezhahq/agent/releases/latest \
         | grep '"tag_name":' | head -n1 | sed -E 's/.*"([^"]+)".*/\1/')
@@ -204,18 +256,25 @@ log_ok "探针下载完成"
 # =========================
 # 步骤 8: 启动探针
 # =========================
-if [ -n "$NZ_UUID" ] && [ -n "$NZ_CLIENT_SECRET" ] && [ -n "$ARGO_DOMAIN" ]; then
+if [ -n "$ARGO_DOMAIN" ]; then
     echo "=========================================="
     echo " 步骤 8: 启动探针"
     echo "=========================================="
     
-    # 等待隧道建立
     log_info "等待隧道建立"
     sleep 5
     
-    # 创建配置文件
-    cat > /dashboard/config.yaml <<EOF
-client_secret: $NZ_CLIENT_SECRET
+    # 从面板配置读取 agent_secret_key
+    AGENT_SECRET=$(grep '^agent_secret_key:' /dashboard/data/config.yaml | awk '{print $2}')
+    
+    # 如果备份恢复，NZ_UUID 可能为空，尝试使用环境变量或生成新的
+    NZ_UUID=${NZ_UUID:-$(cat /proc/sys/kernel/random/uuid)}
+    
+    if [ -z "$AGENT_SECRET" ]; then
+        log_error "无法获取 agent_secret_key"
+    else
+        cat > /dashboard/config.yaml <<EOF
+client_secret: $AGENT_SECRET
 debug: true
 disable_auto_update: true
 disable_command_execute: false
@@ -236,16 +295,19 @@ use_ipv6_country_code: false
 uuid: $NZ_UUID
 EOF
 
-    log_info "探针配置: server=$ARGO_DOMAIN:443, tls=$NZ_TLS"
-    
-    ./nezha-agent -c /dashboard/config.yaml >/dev/null 2>&1 &
-    sleep 3
-    
-    if pgrep -f "nezha-agent.*config.yaml" >/dev/null; then
-        log_ok "探针启动成功"
-    else
-        log_error "探针启动失败"
+        log_info "探针配置: server=$ARGO_DOMAIN:443, tls=$NZ_TLS, uuid=$NZ_UUID"
+        
+        ./nezha-agent -c /dashboard/config.yaml >/dev/null 2>&1 &
+        sleep 3
+        
+        if pgrep -f "nezha-agent.*config.yaml" >/dev/null; then
+            log_ok "探针启动成功"
+        else
+            log_error "探针启动失败"
+        fi
     fi
+else
+    log_warn "未设置 ARGO_DOMAIN，跳过探针"
 fi
 
 # =========================
@@ -264,7 +326,6 @@ if [ -n "$GITHUB_TOKEN" ] && [ -n "$GITHUB_REPO_OWNER" ] && [ -n "$GITHUB_REPO_N
             current_date=$(date +"%Y-%m-%d")
             current_hour=$(date +"%H")
             
-            # 读取 README.md 内容
             readme_content=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
                 "$API_BASE/contents/README.md?ref=$GITHUB_BRANCH" \
                 | jq -r '.content' 2>/dev/null | base64 -d 2>/dev/null | tr -d '[:space:]' || echo "")
@@ -272,12 +333,10 @@ if [ -n "$GITHUB_TOKEN" ] && [ -n "$GITHUB_REPO_OWNER" ] && [ -n "$GITHUB_REPO_N
             should_backup=false
             backup_reason=""
             
-            # 情况1: 手动触发
             if [ "$readme_content" = "backup" ]; then
                 should_backup=true
                 backup_reason="手动触发"
             else
-                # 情况2: 定时备份
                 latest_backup=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
                     "$API_BASE/contents?ref=$GITHUB_BRANCH" \
                     | jq -r '.[].name' 2>/dev/null | grep '^data-.*\.zip$' | sort -r | head -n1)
@@ -289,13 +348,11 @@ if [ -n "$GITHUB_TOKEN" ] && [ -n "$GITHUB_REPO_OWNER" ] && [ -n "$GITHUB_REPO_N
                 fi
             fi
             
-            # 执行备份
             if [ "$should_backup" = "true" ]; then
                 echo "$(date): 触发备份 - $backup_reason"
                 [ -f "/backup.sh" ] && /backup.sh
             fi
             
-            # 每小时检查一次
             sleep 3600
         done
     ) &
@@ -304,6 +361,15 @@ if [ -n "$GITHUB_TOKEN" ] && [ -n "$GITHUB_REPO_OWNER" ] && [ -n "$GITHUB_REPO_N
 else
     log_warn "GITHUB_TOKEN & GITHUB_REPO_NAME & GITHUB_REPO_OWNER 未设置，跳过备份"
 fi
+
+# =========================
+# 步骤 10: 添加保活任务
+# =========================
+echo "=========================================="
+echo " 步骤 10: 添加保活任务"
+echo "=========================================="
+
+add_visit_task
 
 # =========================
 # 启动完成
@@ -322,29 +388,25 @@ echo ""
 log_info "启动健康检查..."
 
 # =========================
-# 健康检查循环 (无日志文件)
+# 健康检查循环
 # =========================
 while true; do
-    # 检查 NeZha 面板 (核心服务)
     if ! pgrep -x "app" >/dev/null; then
         ./app >/dev/null 2>&1 &
         log_warn "面板已重启"
     fi
     
-    # 检查 Cloudflared
     if [ -n "$ARGO_AUTH" ] && ! pgrep -f "cloudflared" >/dev/null; then
         cloudflared --no-autoupdate tunnel run --protocol http2 --token "$ARGO_AUTH" >/dev/null 2>&1 &
         log_warn "cloudflared 已重启"
     fi
 
-    # 检查 Nginx
     if ! pgrep -x "nginx" >/dev/null; then
         nginx
         log_warn "nginx 已重启"
     fi
 
-    # 检查探针
-    if [ -n "$NZ_UUID" ] && ! pgrep -f "nezha-agent" >/dev/null; then
+    if [ -n "$ARGO_DOMAIN" ] && [ -f /dashboard/config.yaml ] && ! pgrep -f "nezha-agent" >/dev/null; then
         ./nezha-agent -c /dashboard/config.yaml >/dev/null 2>&1 &
         log_warn "探针已重启"
     fi

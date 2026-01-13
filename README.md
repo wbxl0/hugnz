@@ -6,21 +6,22 @@
 
 ---
 
-## 📋 必需环境变量配置
+## 📋 必需环境变量配置示例
 
-| 变量名 | 示例值 | 说明 |
-| --- | --- | --- |
-| `ARGO_AUTH` | `eyJhIjoi.......` | Argo Tunnel 认证 Token，从 [Cloudflare Tunnels](https://one.dash.cloudflare.com/) 获取 |
-| `ARGO_DOMAIN` | `nezha.loc.cc` | 面板访问域名，同时用于探针上报 |
-| `GITHUB_TOKEN` | 你的 GitHub Token | 用于配置文件自动备份到 GitHub |
-| `GITHUB_REPO_OWNER` | 你的 GitHub 用户名 | 备份仓库的所有者 |
-| `GITHUB_REPO_NAME` | 备份仓库名称 | 存储配置备份的仓库 |
-| `GITHUB_BRANCH` | `main` | 备份使用的分支名称 |
-| `ZIP_PASSWORD` | 你的压缩包密码 | 备份压缩包加密密码 |
-| `NZ_UUID` | `f8ff434*************62e0` | 当前 Agent 的 UUID，用于探针上报 |
-| `NZ_CLIENT_SECRET` | `kDerKiyNp*************mvj0XMy` | 备份文件中 `.yaml` 文件里的 `agentsecretkey` 参数 |
-| `NZ_TLS` | `true` | 是否启用 TLS（`true`/`false`） |
-| `DASHBOARD_VERSION` | `v1.14.1` | 指定部署的探针版本 |
+| 变量名                 | 示例值                             | 必填 | 说明                                                                               |
+| ------------------- | ------------------------------- | -- | -------------------------------------------------------------------------------- |
+| `ARGO_AUTH`         | `eyJhIjoi.......`               | ✅  | Argo Tunnel 认证 Token，从 [Cloudflare Tunnels](https://one.dash.cloudflare.com/) 获取 |
+| `ARGO_DOMAIN`       | `nezha.loc.cc`                  | ✅  | 面板访问域名，同时用于探针上报                                                                  |
+| `GITHUB_TOKEN`      | `ghp_xxxxxxxx`                  | ✅  | GitHub Token，用于配置文件自动备份到 GitHub                                                  |
+| `GITHUB_REPO_OWNER` | `your_username`                 | ✅  | 备份仓库所有者                                                                          |
+| `GITHUB_REPO_NAME`  | `nezha-backup`                  | ✅  | 存储配置备份的仓库名称                                                                      |
+| `GITHUB_BRANCH`     | `main`                          | ✅  | 备份使用的分支名称                                                                        |
+| `ZIP_PASSWORD`      | `147369`                        | ✅  | 备份压缩包加密密码                                                                        |
+| `NZ_UUID`           | `f8ff434*************62e0`      | ✅  |  在线生成访问:https://www.uuidgenerator.net/                                                           |
+| `NZ_CLIENT_SECRET`  | `kDerKiyNp*************mvj0XMy` | ❌  | `自动生成` 备份文件中 `.yaml` 文件里的 `agentsecretkey` 参数                                           |
+| `NZ_TLS`            | `true`                          | ❌  | 是否启用 TLS，默认 `true`                                                               |
+| `DASHBOARD_VERSION` | `v1.14.1`                       | ❌  | 指定部署的探针版本，默认 `latest`                                                            |
+| `PROJECT_URL` | `https://xxx.hf.space`                       | ❌  | 设置即启用保活，不设置则跳过                                                            |
 
 ---
 
@@ -58,6 +59,21 @@
 
 ---
 
+## 💾 触发备份
+### 方法 1：自动备份
+- 默认:凌晨4点自动备份
+
+### 方法 2：手动备份 通过 GitHub 网页操作
+
+1. 访问你的备份仓库
+2. 打开或生建 `README.md` 文件
+3. 点击右上角的编辑按钮（铅笔图标 ✏️）
+4. 将文件内容**全部替换**为：`backup`
+5. 点击 **"提交更改"** 提交
+6. 等待最多 1 小时（守护进程每小时自动检查一次）
+
+---
+
 ## 📁 项目文件说明
 
 ```
@@ -71,6 +87,7 @@
 ├── main.conf                     # 主配置文件
 ├── ssl.conf.template             # SSL 配置模板
 ├── index.html                    # 伪装页面
+├── 一步一步照着做教程.md          # 保姆级教程文档
 └── README.md                     # 项目文档
 ```
 
@@ -85,19 +102,6 @@
 | `ssl.conf.template` | SSL 配置模板 | Nginx SSL 配置模板文件 |
 | `index.html` | 伪装页面 | **建议用 AI 生成自定义内容**，隐藏真实身份 |
 | `README.md` | 项目文档 | 部署说明和使用指南 |
-
----
-
-## 💾 手动触发备份
-
-### 方法 1：通过 GitHub 网页操作（推荐）
-
-1. 访问你的备份仓库
-2. 打开 `README.md` 文件
-3. 点击右上角的编辑按钮（铅笔图标 ✏️）
-4. 将文件内容**全部替换**为：`backup`
-5. 点击 **"提交更改"** 提交
-6. 等待最多 1 小时（守护进程每小时自动检查一次）
 
 ---
 
@@ -137,9 +141,11 @@ FROM ghcr.io/oyz8/nz:latest
 
 1. 进入 **Logs** 查看部署进度
 2. 部署成功后，使用 **Cloudflare 域名**（`ARGO_DOMAIN`）访问面板
+3. 抱脸空间需要保活的，自行解决 或 设置 `PROJECT_URL` 变量
 
 ---
 
+### *祝部署顺利！* 🎉
 
 
 
